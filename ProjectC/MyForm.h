@@ -8,6 +8,7 @@
 #include <iostream>
 
 
+
 namespace ProjectC {
 
 	using namespace System;
@@ -51,8 +52,9 @@ namespace ProjectC {
 	private: System::Windows::Forms::Label^ label2;
 	private: System::Windows::Forms::ComboBox^ comboBox1;
 	private: System::Windows::Forms::Button^ button6;
-	private: System::Windows::Forms::Label^ label3;
+
 	private: System::Windows::Forms::Button^ button7;
+	private: System::Windows::Forms::ListBox^ listBox1;
 	protected:
 
 	private:
@@ -68,6 +70,19 @@ namespace ProjectC {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			// initialize database
+			int qstate;
+			MYSQL* conn;
+			MYSQL_ROW row;
+			MYSQL_RES* res;
+			conn = mysql_init(0);
+			conn = mysql_real_connect(conn, "localhost", "root", "admin", "testdb", 3306, NULL, 0);
+
+			
+
+
+			// start
+
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->button2 = (gcnew System::Windows::Forms::Button());
@@ -77,8 +92,8 @@ namespace ProjectC {
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->comboBox1 = (gcnew System::Windows::Forms::ComboBox());
 			this->button6 = (gcnew System::Windows::Forms::Button());
-			this->label3 = (gcnew System::Windows::Forms::Label());
 			this->button7 = (gcnew System::Windows::Forms::Button());
+			this->listBox1 = (gcnew System::Windows::Forms::ListBox());
 			this->SuspendLayout();
 			// 
 			// label1
@@ -168,19 +183,9 @@ namespace ProjectC {
 			this->button6->UseVisualStyleBackColor = true;
 			this->button6->Click += gcnew System::EventHandler(this, &MyForm::button6_Click);
 			// 
-			// label3
-			// 
-			this->label3->AutoSize = true;
-			this->label3->Location = System::Drawing::Point(148, 180);
-			this->label3->Name = L"label3";
-			this->label3->Size = System::Drawing::Size(35, 13);
-			this->label3->TabIndex = 9;
-			this->label3->Text = L"label3";
-			this->label3->Click += gcnew System::EventHandler(this, &MyForm::label3_Click);
-			// 
 			// button7
 			// 
-			this->button7->Location = System::Drawing::Point(205, 125);
+			this->button7->Location = System::Drawing::Point(328, 279);
 			this->button7->Name = L"button7";
 			this->button7->Size = System::Drawing::Size(75, 23);
 			this->button7->TabIndex = 10;
@@ -188,13 +193,38 @@ namespace ProjectC {
 			this->button7->UseVisualStyleBackColor = true;
 			this->button7->Click += gcnew System::EventHandler(this, &MyForm::button7_Click);
 			// 
+			// listBox1
+			// 
+			this->listBox1->FormattingEnabled = true;
+			this->listBox1->Location = System::Drawing::Point(64, 108);
+			this->listBox1->Name = L"listBox1";
+			this->listBox1->Size = System::Drawing::Size(120, 95);
+			this->listBox1->TabIndex = 11;
+			this->listBox1->SelectedIndexChanged += gcnew System::EventHandler(this, &MyForm::listBox1_SelectedIndexChanged);
+			
+			listBox1->Items->Add("Son");
+			if (conn) {
+				std::string query = "SELECT * from test";
+				const char* q = query.c_str();
+				qstate = mysql_query(conn, q);
+				if (!qstate) {
+					res = mysql_store_result(conn);
+					while (row = mysql_fetch_row(res)) {
+						// label3->Text = System::Convert::ToString(row[1]);
+						listBox1->Items->Add(System::Convert::ToString(row[1]));
+					}
+				}
+
+			}
+
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(538, 314);
+			this->Controls->Add(this->listBox1);
 			this->Controls->Add(this->button7);
-			this->Controls->Add(this->label3);
 			this->Controls->Add(this->button6);
 			this->Controls->Add(this->comboBox1);
 			this->Controls->Add(this->label2);
@@ -239,26 +269,12 @@ private: System::Void label3_Click(System::Object^ sender, System::EventArgs^ e)
 	
 }
 private: System::Void button7_Click(System::Object^ sender, System::EventArgs^ e) {
-	int qstate;
-	MYSQL* conn;
-	MYSQL_ROW row;
-	MYSQL_RES* res;
-	conn = mysql_init(0);
-	conn = mysql_real_connect(conn, "localhost", "root", "admin", "testdb", 3306, NULL, 0);
-	
-	if (conn) {
-		std::string query = "SELECT * from test";
-		const char* q = query.c_str();
-		qstate = mysql_query(conn, q);
-		if (!qstate) {
-			res = mysql_store_result(conn);
-			while (row = mysql_fetch_row(res)) {
-				label3->Text = System::Convert::ToString(row[1]);
-			}
-		}
-		
-	}
-	
+
+}
+
+
+private: System::Void listBox1_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
+
 }
 };
 }
