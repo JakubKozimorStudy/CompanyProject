@@ -16,7 +16,7 @@ void main() {
 	MYSQL_RES* res;
 	conn = mysql_init(0);
 
-	conn = mysql_real_connect(conn, "localhost", "root", "admin", "testdb", 3306, NULL, 0);
+	conn = mysql_real_connect(conn, "localhost", "root", "root", "testdb", 3306, NULL, 0);
 
 	if (conn) {
 		puts("Po³¹czono");

@@ -1,4 +1,12 @@
 #pragma once
+#include "Employee.h"
+#include "Role.h"
+#include "DatabaseRepository.h"
+#include <msclr\marshal_cppstd.h>
+#include "Role.h"
+#include <algorithm>
+#include <list>
+
 
 namespace ProjectC {
 
@@ -28,9 +36,10 @@ namespace ProjectC {
 		/// Clean up any resources being used.
 		/// </summary>
 		~AddUser()
-		{
+		{repo->~DatabaseRepository();
 			if (components)
 			{
+				
 				delete components;
 			}
 		}
@@ -51,7 +60,7 @@ namespace ProjectC {
 
 	protected:
 
-	private:
+	private: DatabaseRepository* repo = new DatabaseRepository();
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -64,6 +73,8 @@ namespace ProjectC {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			
+
 			this->labal1 = (gcnew System::Windows::Forms::Label());
 			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
 			this->label1 = (gcnew System::Windows::Forms::Label());
@@ -137,6 +148,15 @@ namespace ProjectC {
 			this->comboBox1->Name = L"comboBox1";
 			this->comboBox1->Size = System::Drawing::Size(100, 21);
 			this->comboBox1->TabIndex = 6;
+
+			/*		std::list<Role> data = repo->getAllRoles(repo->getConn());
+			std::list<Role>::iterator it;
+			for (it = data.begin(); it != data.end(); ++it) {
+				String^ s_name = msclr::interop::marshal_as<System::String^>(it->getRoleName());
+				comboBox1->Items->Add(s_name);
+			}*/
+
+
 			// 
 			// button1
 			// 
@@ -146,6 +166,7 @@ namespace ProjectC {
 			this->button1->TabIndex = 7;
 			this->button1->Text = L"Dodaj";
 			this->button1->UseVisualStyleBackColor = true;
+			this->button1->Click += gcnew System::EventHandler(this, &AddUser::button1_Click);
 			// 
 			// label4
 			// 
@@ -162,6 +183,7 @@ namespace ProjectC {
 			this->textBox3->Name = L"textBox3";
 			this->textBox3->Size = System::Drawing::Size(100, 20);
 			this->textBox3->TabIndex = 9;
+			this->textBox3->TextChanged += gcnew System::EventHandler(this, &AddUser::textBox3_TextChanged);
 			// 
 			// dateTimePicker1
 			// 
@@ -203,5 +225,18 @@ namespace ProjectC {
 
 		}
 #pragma endregion
+private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
+	String ^ firstName = textBox1->Text;
+	String ^ lastName = textBox2->Text;
+	String ^ salary = textBox3->Text;
+	int intSalary = System::Convert::ToInt16(salary);
+	Employee* emp = new Employee(msclr::interop::marshal_as<std::string>(firstName), msclr::interop::marshal_as<std::string>(lastName), 3, intSalary);
+	repo->saveEmployee(*emp, repo->getConn());
+	textBox1->ResetText();
+	textBox2->ResetText();
+	textBox3->ResetText();
+}	
+private: System::Void textBox3_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+}
 };
 }

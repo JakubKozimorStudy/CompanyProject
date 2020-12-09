@@ -1,4 +1,7 @@
-#pragma once
+#include "Role.h"
+#include "DatabaseRepository.h"
+#include "string.h"
+#include <msclr\marshal_cppstd.h>
 
 namespace ProjectC {
 
@@ -29,6 +32,7 @@ namespace ProjectC {
 		/// </summary>
 		~AddRole()
 		{
+			repo -> ~DatabaseRepository();
 			if (components)
 			{
 				delete components;
@@ -40,7 +44,7 @@ namespace ProjectC {
 	private: System::Windows::Forms::Label^ label2;
 	private: System::Windows::Forms::Button^ button1;
 
-	private:
+	private: DatabaseRepository* repo = new DatabaseRepository();
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -94,6 +98,7 @@ namespace ProjectC {
 			this->button1->TabIndex = 3;
 			this->button1->Text = L"Dodaj";
 			this->button1->UseVisualStyleBackColor = true;
+			this->button1->Click += gcnew System::EventHandler(this, &AddRole::button1_Click);
 			// 
 			// AddRole
 			// 
@@ -112,5 +117,11 @@ namespace ProjectC {
 		}
 #pragma endregion
 	
-	};
+	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
+		String^ newRoleName = textBox1->Text;
+		std::string s_roleName = msclr::interop::marshal_as<std::string>(newRoleName);
+		Role newRole = Role(s_roleName);
+		repo->saveRole(newRole, repo->getConn());
+	}
+};
 }

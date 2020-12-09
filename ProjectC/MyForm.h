@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "AddUser.h"
 #include "EditUser.h"
 #include "AddRole.h"
@@ -6,7 +6,9 @@
 #include "Stats.h"
 #include <mysql.h>
 #include <iostream>
-
+#include "DatabaseRepository.h"
+#include <algorithm>
+#include <list>
 
 
 namespace ProjectC {
@@ -38,8 +40,10 @@ namespace ProjectC {
 		/// </summary>
 		~MyForm()
 		{
+			repo->~DatabaseRepository();
 			if (components)
 			{
+				
 				delete components;
 			}
 		}
@@ -57,7 +61,7 @@ namespace ProjectC {
 	private: System::Windows::Forms::ListBox^ listBox1;
 	protected:
 
-	private:
+	private: DatabaseRepository* repo = new DatabaseRepository();
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -70,16 +74,9 @@ namespace ProjectC {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			// initialize database
-			int qstate;
-			MYSQL* conn;
-			MYSQL_ROW row;
-			MYSQL_RES* res;
-			conn = mysql_init(0);
-			conn = mysql_real_connect(conn, "localhost", "root", "admin", "testdb", 3306, NULL, 0);
+
 
 			
-
 
 			// start
 
@@ -133,7 +130,7 @@ namespace ProjectC {
 			this->button3->Name = L"button3";
 			this->button3->Size = System::Drawing::Size(119, 23);
 			this->button3->TabIndex = 3;
-			this->button3->Text = L"Usuñ pracownika";
+			this->button3->Text = L"UsuÅ„ pracownika";
 			this->button3->UseVisualStyleBackColor = true;
 			// 
 			// button4
@@ -152,7 +149,7 @@ namespace ProjectC {
 			this->button5->Name = L"button5";
 			this->button5->Size = System::Drawing::Size(119, 23);
 			this->button5->TabIndex = 5;
-			this->button5->Text = L"Zmieñ stanowisko";
+			this->button5->Text = L"ZmieÅ„ stanowisko";
 			this->button5->UseVisualStyleBackColor = true;
 			this->button5->Click += gcnew System::EventHandler(this, &MyForm::button5_Click);
 			// 
@@ -203,20 +200,12 @@ namespace ProjectC {
 			this->listBox1->SelectedIndexChanged += gcnew System::EventHandler(this, &MyForm::listBox1_SelectedIndexChanged);
 			
 			listBox1->Items->Add("Son");
-			if (conn) {
-				std::string query = "SELECT * from test";
-				const char* q = query.c_str();
-				qstate = mysql_query(conn, q);
-				if (!qstate) {
-					res = mysql_store_result(conn);
-					while (row = mysql_fetch_row(res)) {
-						// label3->Text = System::Convert::ToString(row[1]);
-						listBox1->Items->Add(System::Convert::ToString(row[1]));
-					}
-				}
-
+			std::list<Employee> data = repo->getAllEmployees(repo->getConn());
+			std::list<Employee>::iterator it;
+			for (it = data.begin(); it != data.end(); ++it) {
+				String^ s_name = msclr::interop::marshal_as<System::String^>(it->getFirstName());
+			listBox1->Items->Add(s_name);
 			}
-
 			// 
 			// MyForm
 			// 
@@ -240,14 +229,14 @@ namespace ProjectC {
 			this->PerformLayout();
 
 		}
-#pragma endregion
+		
 
-private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
-	AddUser^ addUserForm = gcnew AddUser;
-	addUserForm->Show();
-	
-	
-}
+	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
+		AddUser^ addUserForm = gcnew AddUser;
+		addUserForm->Show();
+
+	}
+
 private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
 	AddRole^ addRoleForm = gcnew AddRole;
 	addRoleForm->Show();
@@ -278,3 +267,4 @@ private: System::Void listBox1_SelectedIndexChanged(System::Object^ sender, Syst
 }
 };
 }
+#pragma endregion
