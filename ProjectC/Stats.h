@@ -1,4 +1,15 @@
 #pragma once
+#include "Employee.h"
+#include "Role.h"
+#include "DatabaseRepository.h"
+#include <msclr\marshal_cppstd.h>
+#include "Role.h"
+#include <algorithm>
+#include <list>
+#include <mysql.h>
+#include <iostream>
+#include <string>
+
 
 namespace ProjectC {
 
@@ -29,9 +40,11 @@ namespace ProjectC {
 		/// </summary>
 		~Stats()
 		{
+			{repo->~DatabaseRepository();
 			if (components)
 			{
 				delete components;
+			}
 			}
 		}
 	private: System::Windows::Forms::ComboBox^ comboBox1;
@@ -42,7 +55,7 @@ namespace ProjectC {
 	private: System::Windows::Forms::Label^ label4;
 	private: System::Windows::Forms::Label^ label5;
 
-	private:
+	private: DatabaseRepository* repo = new DatabaseRepository();
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -70,6 +83,7 @@ namespace ProjectC {
 			this->comboBox1->Name = L"comboBox1";
 			this->comboBox1->Size = System::Drawing::Size(85, 21);
 			this->comboBox1->TabIndex = 0;
+			this->comboBox1->SelectedIndexChanged += gcnew System::EventHandler(this, &Stats::comboBox1_SelectedIndexChanged);
 			// 
 			// label1
 			// 
@@ -122,9 +136,8 @@ namespace ProjectC {
 				static_cast<System::Byte>(238)));
 			this->label5->Location = System::Drawing::Point(354, 107);
 			this->label5->Name = L"label5";
-			this->label5->Size = System::Drawing::Size(40, 20);
+			this->label5->Size = System::Drawing::Size(0, 20);
 			this->label5->TabIndex = 5;
-			this->label5->Text = L"iloœæ";
 			// 
 			// Stats
 			// 
@@ -141,8 +154,32 @@ namespace ProjectC {
 			this->Text = L"Statystyki";
 			this->ResumeLayout(false);
 			this->PerformLayout();
+			
+			std::list<Role> data = repo->getAllRoles(repo->getConn());
 
+			std::list<Role>::iterator it;
+			for (it = data.begin(); it != data.end(); ++it) {
+				String^ s_name = msclr::interop::marshal_as<System::String^>(it->getRoleName());
+				comboBox1->Items->Add(s_name);
+			}
+
+			int average = repo->averageSaralry(repo->getConn());
+
+			this->label3->Text = System::Convert::ToString(average) + " z³";
+
+			this->label5->Text = System::Convert::ToString(0);
+			
 		}
 #pragma endregion
-	};
+	private: System::Void comboBox1_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
+		String^ role = comboBox1->Text;
+		msclr::interop::marshal_context context;
+		std::string standardString = context.marshal_as<std::string>(role);
+
+		int count = repo->countEmployee(repo->getConn(), standardString);
+
+		this->label5->Text = System::Convert::ToString(count);
+
+	}
+};
 }

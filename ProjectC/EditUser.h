@@ -34,9 +34,9 @@ namespace ProjectC {
 				delete components;
 			}
 		}
-	private: System::Windows::Forms::Label^ label5;
+
 	protected:
-	private: System::Windows::Forms::DateTimePicker^ dateTimePicker1;
+
 	private: System::Windows::Forms::TextBox^ textBox3;
 	private: System::Windows::Forms::Label^ label4;
 	private: System::Windows::Forms::Button^ button1;
@@ -70,8 +70,6 @@ namespace ProjectC {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			this->label5 = (gcnew System::Windows::Forms::Label());
-			this->dateTimePicker1 = (gcnew System::Windows::Forms::DateTimePicker());
 			this->textBox3 = (gcnew System::Windows::Forms::TextBox());
 			this->label4 = (gcnew System::Windows::Forms::Label());
 			this->button1 = (gcnew System::Windows::Forms::Button());
@@ -83,22 +81,6 @@ namespace ProjectC {
 			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
 			this->labal1 = (gcnew System::Windows::Forms::Label());
 			this->SuspendLayout();
-			// 
-			// label5
-			// 
-			this->label5->AutoSize = true;
-			this->label5->Location = System::Drawing::Point(92, 239);
-			this->label5->Name = L"label5";
-			this->label5->Size = System::Drawing::Size(78, 13);
-			this->label5->TabIndex = 23;
-			this->label5->Text = L"Zatrudniony od";
-			// 
-			// dateTimePicker1
-			// 
-			this->dateTimePicker1->Location = System::Drawing::Point(60, 255);
-			this->dateTimePicker1->Name = L"dateTimePicker1";
-			this->dateTimePicker1->Size = System::Drawing::Size(144, 20);
-			this->dateTimePicker1->TabIndex = 22;
 			// 
 			// textBox3
 			// 
@@ -118,7 +100,7 @@ namespace ProjectC {
 			// 
 			// button1
 			// 
-			this->button1->Location = System::Drawing::Point(78, 281);
+			this->button1->Location = System::Drawing::Point(78, 259);
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(100, 23);
 			this->button1->TabIndex = 19;
@@ -190,8 +172,6 @@ namespace ProjectC {
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(265, 314);
-			this->Controls->Add(this->label5);
-			this->Controls->Add(this->dateTimePicker1);
 			this->Controls->Add(this->textBox3);
 			this->Controls->Add(this->label4);
 			this->Controls->Add(this->button1);

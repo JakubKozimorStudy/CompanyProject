@@ -1,4 +1,14 @@
 #pragma once
+#include "Employee.h"
+#include "Role.h"
+#include "DatabaseRepository.h"
+#include <msclr\marshal_cppstd.h>
+#include "Role.h"
+#include <algorithm>
+#include <list>
+#include <mysql.h>
+#include <iostream>
+#include <string>
 
 namespace ProjectC {
 
@@ -29,6 +39,7 @@ namespace ProjectC {
 		/// </summary>
 		~ChangeRole()
 		{
+			repo->~DatabaseRepository();
 			if (components)
 			{
 				delete components;
@@ -39,7 +50,7 @@ namespace ProjectC {
 	private: System::Windows::Forms::Button^ button1;
 	private: System::Windows::Forms::ComboBox^ comboBox1;
 
-	private:
+	private: DatabaseRepository* repo = new DatabaseRepository();
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -97,6 +108,14 @@ namespace ProjectC {
 			this->Text = L"Zmieñ stanowisko";
 			this->ResumeLayout(false);
 			this->PerformLayout();
+
+			std::list<Role> data = repo->getAllRoles(repo->getConn());
+
+			std::list<Role>::iterator it;
+			for (it = data.begin(); it != data.end(); ++it) {
+				String^ s_name = msclr::interop::marshal_as<System::String^>(it->getRoleName());
+				comboBox1->Items->Add(s_name);
+			}
 
 		}
 #pragma endregion

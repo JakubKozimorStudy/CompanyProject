@@ -24,6 +24,8 @@ public:
 	std::list<Role> getAllRoles(MYSQL* conn);
 	int getLastRecordFromRoles(MYSQL* conn);
 	void saveRole(Role newRole, MYSQL* conn);
+	int DatabaseRepository::averageSaralry(MYSQL* conn);
+	int DatabaseRepository::countEmployee(MYSQL* conn, std::string sort);
 	MYSQL* getConn() {
 		return this->conn;
 	}

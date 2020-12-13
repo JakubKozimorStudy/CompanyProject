@@ -138,6 +138,49 @@ int DatabaseRepository::getLastRecordFromEmployees(MYSQL* conn) {
 	}
 }
 
+int DatabaseRepository::averageSaralry(MYSQL* conn) {
+	MYSQL_RES* res;
+	MYSQL_ROW row;
+	std::string query = "SELECT AVG(salary) as srednie_zarobki FROM employee";
+	int average = -1;
+	const char* q = query.c_str();
+	boolean qstate = mysql_query(conn, q);
+	if (!qstate)
+	{
+
+		res = mysql_store_result(conn);
+		while (row = mysql_fetch_row(res))
+		{
+			std::string s_id(row[0]);
+			average = std::stoi(s_id);
+			return average;
+		}
+		return average;
+	}
+}
+
+int DatabaseRepository::countEmployee(MYSQL* conn, std::string sort) {
+	MYSQL_RES* res;
+	MYSQL_ROW row;
+	std::string query = "SELECT COUNT(*) AS ilosc FROM employee WHERE role_id IN (SELECT id FROM emp_role WHERE role_name ='" +  sort + "');";
+	std::cout << query << std::endl;
+	int count = -1;
+	const char* q = query.c_str();
+	boolean qstate = mysql_query(conn, q);
+	if (!qstate)
+	{
+
+		res = mysql_store_result(conn);
+		while (row = mysql_fetch_row(res))
+		{
+			std::string s_id(row[0]);
+			count = std::stoi(s_id);
+			return count;
+		}
+		return count;
+	}
+}
+
 void DatabaseRepository::saveEmployee(Employee newEmp, MYSQL* conn) {
 
 	MYSQL_RES* res;
