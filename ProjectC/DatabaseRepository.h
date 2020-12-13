@@ -26,6 +26,7 @@ public:
 	void saveRole(Role newRole, MYSQL* conn);
 	int DatabaseRepository::averageSaralry(MYSQL* conn);
 	int DatabaseRepository::countEmployee(MYSQL* conn, std::string sort);
+	void DatabaseRepository::removeUser(MYSQL* conn, int userId);
 	MYSQL* getConn() {
 		return this->conn;
 	}

@@ -65,23 +65,21 @@ std::list<Employee> DatabaseRepository::getAllEmployeesBySort(MYSQL* conn, std::
 
 	MYSQL_RES* res;
 	MYSQL_ROW row;
-	std::string query = "SELECT * FROM employee";
-	if (sort == "Pensja od najwiêkszej") {
-		std::string query = "SELECT * FROM employee ORDER BY salary DESC";
+	std::string query;
+	if (sort == "Pensja od najwiekszej") {
+		query = "SELECT * FROM employee ORDER BY salary DESC";
 	}
-	else if(sort == "Pensja od najmniejszej"){
-		std::string query = "SELECT * FROM employee ORDER BY salary";
-	}
-
-	// Podmieniæ zarobki na date
-	else if (sort == "D³ugosc pracy od najwiêkszej") {
-		std::string query = "SELECT * FROM employee ORDER BY salary DESC";
-	}
-	else if (sort == "D³ugosc pracy od najmniejszej") {
-		std::string query = "SELECT * FROM employee ORDER BY salary";
+	if(sort == "Pensja od najmniejszej"){
+		query = "SELECT * FROM employee ORDER BY salary";
 	}
 
-	
+	if (sort == "D³ugosc pracy od najwiekszej") {
+		query = "SELECT * FROM employee ORDER BY start_date DESC";
+	}
+	if (sort == "D³ugosc pracy od najmniejszej") {
+		query = "SELECT * FROM employee ORDER BY start_date";
+	}
+	std::cout << query << std::endl;
 	const char* q = query.c_str();
 	boolean qstate = mysql_query(conn, q);
 	if (!qstate)
@@ -191,6 +189,20 @@ void DatabaseRepository::saveEmployee(Employee newEmp, MYSQL* conn) {
 		+ newEmp.getLastName() + "', '" + std::to_string(newEmp.getRole()) + "', '" + std::to_string(newEmp.getSalary()) + "', curdate()" + " )";
 	std::cout << insert_query << std::endl;
 	boolean qstate = mysql_query(conn, insert_query.c_str());
+	if (qstate != 0)
+	{
+		std::cout << mysql_error(conn) << std::endl;
+	}
+
+}
+
+void DatabaseRepository::removeUser(MYSQL* conn, int userId) {
+
+	MYSQL_RES* res;
+	MYSQL_ROW row;
+	std::string remove_query = "DELETE FROM employee WHERE id =" + std::to_string(userId);
+	std::cout << remove_query << std::endl;
+	boolean qstate = mysql_query(conn, remove_query.c_str());
 	if (qstate != 0)
 	{
 		std::cout << mysql_error(conn) << std::endl;
