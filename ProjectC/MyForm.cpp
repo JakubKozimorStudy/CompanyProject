@@ -10,7 +10,7 @@ int qstate;
 [STAThread]
 
 void main() {
-
+	/*
 	MYSQL* conn;
 	MYSQL_ROW row;
 	MYSQL_RES* res;
@@ -37,6 +37,7 @@ void main() {
 	else {
 		puts("Nieudane polaczenie");
 	}
+	*/
 	
 	Application::EnableVisualStyles();
 	Application::SetCompatibleTextRenderingDefault(false);

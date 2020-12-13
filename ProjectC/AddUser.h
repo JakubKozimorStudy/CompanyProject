@@ -6,6 +6,9 @@
 #include "Role.h"
 #include <algorithm>
 #include <list>
+#include <mysql.h>
+#include <iostream>
+#include <string>
 
 
 namespace ProjectC {
@@ -53,8 +56,8 @@ namespace ProjectC {
 	private: System::Windows::Forms::Button^ button1;
 	private: System::Windows::Forms::Label^ label4;
 	private: System::Windows::Forms::TextBox^ textBox3;
-	private: System::Windows::Forms::DateTimePicker^ dateTimePicker1;
-	private: System::Windows::Forms::Label^ label5;
+
+
 
 	protected:
 
@@ -73,8 +76,6 @@ namespace ProjectC {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			
-
 			this->labal1 = (gcnew System::Windows::Forms::Label());
 			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
 			this->label1 = (gcnew System::Windows::Forms::Label());
@@ -85,9 +86,11 @@ namespace ProjectC {
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->label4 = (gcnew System::Windows::Forms::Label());
 			this->textBox3 = (gcnew System::Windows::Forms::TextBox());
-			this->dateTimePicker1 = (gcnew System::Windows::Forms::DateTimePicker());
-			this->label5 = (gcnew System::Windows::Forms::Label());
 			this->SuspendLayout();
+
+			
+
+
 			// 
 			// labal1
 			// 
@@ -148,19 +151,10 @@ namespace ProjectC {
 			this->comboBox1->Name = L"comboBox1";
 			this->comboBox1->Size = System::Drawing::Size(100, 21);
 			this->comboBox1->TabIndex = 6;
-
-			/*		std::list<Role> data = repo->getAllRoles(repo->getConn());
-			std::list<Role>::iterator it;
-			for (it = data.begin(); it != data.end(); ++it) {
-				String^ s_name = msclr::interop::marshal_as<System::String^>(it->getRoleName());
-				comboBox1->Items->Add(s_name);
-			}*/
-
-
 			// 
 			// button1
 			// 
-			this->button1->Location = System::Drawing::Point(79, 279);
+			this->button1->Location = System::Drawing::Point(79, 264);
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(100, 23);
 			this->button1->TabIndex = 7;
@@ -185,29 +179,11 @@ namespace ProjectC {
 			this->textBox3->TabIndex = 9;
 			this->textBox3->TextChanged += gcnew System::EventHandler(this, &AddUser::textBox3_TextChanged);
 			// 
-			// dateTimePicker1
-			// 
-			this->dateTimePicker1->Location = System::Drawing::Point(61, 253);
-			this->dateTimePicker1->Name = L"dateTimePicker1";
-			this->dateTimePicker1->Size = System::Drawing::Size(144, 20);
-			this->dateTimePicker1->TabIndex = 10;
-			// 
-			// label5
-			// 
-			this->label5->AutoSize = true;
-			this->label5->Location = System::Drawing::Point(93, 237);
-			this->label5->Name = L"label5";
-			this->label5->Size = System::Drawing::Size(78, 13);
-			this->label5->TabIndex = 11;
-			this->label5->Text = L"Zatrudniony od";
-			// 
 			// AddUser
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(273, 314);
-			this->Controls->Add(this->label5);
-			this->Controls->Add(this->dateTimePicker1);
 			this->Controls->Add(this->textBox3);
 			this->Controls->Add(this->label4);
 			this->Controls->Add(this->button1);
@@ -223,6 +199,16 @@ namespace ProjectC {
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
+			
+			std::list<Role> data = repo->getAllRoles(repo->getConn());
+			
+			std::list<Role>::iterator it;
+			for (it = data.begin(); it != data.end(); ++it) {
+				String^ s_name = msclr::interop::marshal_as<System::String^>(it->getRoleName());
+				comboBox1->Items->Add(s_name);
+			}
+			
+
 		}
 #pragma endregion
 private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -230,7 +216,19 @@ private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e
 	String ^ lastName = textBox2->Text;
 	String ^ salary = textBox3->Text;
 	int intSalary = System::Convert::ToInt16(salary);
-	Employee* emp = new Employee(msclr::interop::marshal_as<std::string>(firstName), msclr::interop::marshal_as<std::string>(lastName), 3, intSalary);
+	String^ role = comboBox1->Text;
+	int roleID = 1;
+	std::list<Role> data = repo->getAllRoles(repo->getConn());
+
+	std::list<Role>::iterator it;
+	for (it = data.begin(); it != data.end(); ++it) {
+		String^ s_name = msclr::interop::marshal_as<System::String^>(it->getRoleName());
+		if (s_name == role) {
+			roleID = it->getId();
+		}
+	}
+
+	Employee* emp = new Employee(msclr::interop::marshal_as<std::string>(firstName), msclr::interop::marshal_as<std::string>(lastName), roleID, intSalary);
 	repo->saveEmployee(*emp, repo->getConn());
 	textBox1->ResetText();
 	textBox2->ResetText();

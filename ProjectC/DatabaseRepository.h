@@ -18,6 +18,7 @@ public:
 	DatabaseRepository();
 	~DatabaseRepository();
 	std::list<Employee> getAllEmployees(MYSQL* conn);
+	std::list<Employee> DatabaseRepository::getAllEmployeesBySort(MYSQL* conn, std::string sort);
 	int getLastRecordFromEmployees(MYSQL* conn);
 	void saveEmployee(Employee emp, MYSQL* conn);
 	std::list<Role> getAllRoles(MYSQL* conn);

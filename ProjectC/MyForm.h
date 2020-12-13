@@ -199,13 +199,7 @@ namespace ProjectC {
 			this->listBox1->TabIndex = 11;
 			this->listBox1->SelectedIndexChanged += gcnew System::EventHandler(this, &MyForm::listBox1_SelectedIndexChanged);
 			
-			listBox1->Items->Add("Son");
-			std::list<Employee> data = repo->getAllEmployees(repo->getConn());
-			std::list<Employee>::iterator it;
-			for (it = data.begin(); it != data.end(); ++it) {
-				String^ s_name = msclr::interop::marshal_as<System::String^>(it->getFirstName());
-			listBox1->Items->Add(s_name);
-			}
+		
 			// 
 			// MyForm
 			// 
@@ -228,6 +222,18 @@ namespace ProjectC {
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
+
+			std::list<Employee> data = repo->getAllEmployees(repo->getConn());
+			std::list<Employee>::iterator it;
+			for (it = data.begin(); it != data.end(); ++it) {
+				String^ s_name = msclr::interop::marshal_as<System::String^>(it->getFirstName());
+				listBox1->Items->Add(s_name);
+			}
+
+			comboBox1->Items->Add("Pensja od największej");
+			comboBox1->Items->Add("Pensja od najmniejszej");
+			comboBox1->Items->Add("Długosc pracy od największej");
+			comboBox1->Items->Add("Długosc pracy od najmniejszej");
 		}
 		
 

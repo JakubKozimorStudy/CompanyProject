@@ -122,6 +122,7 @@ namespace ProjectC {
 		std::string s_roleName = msclr::interop::marshal_as<std::string>(newRoleName);
 		Role newRole = Role(s_roleName);
 		repo->saveRole(newRole, repo->getConn());
+		textBox1->ResetText();
 	}
 };
 }
