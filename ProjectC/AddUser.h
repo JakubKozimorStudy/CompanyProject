@@ -25,6 +25,7 @@ namespace ProjectC {
 	/// </summary>
 	public ref class AddUser : public System::Windows::Forms::Form
 	{
+	private: DataGridView^ gridView1;
 	public:
 		AddUser(void)
 		{
@@ -32,6 +33,14 @@ namespace ProjectC {
 			//
 			//TODO: Add the constructor code here
 			//
+		}
+		AddUser(DataGridView^ dataGridView1)
+		{
+			InitializeComponent();
+			//
+			//TODO: Add the constructor code here
+			//
+			this->gridView1 = dataGridView1;
 		}
 
 	protected:
@@ -64,6 +73,7 @@ namespace ProjectC {
 	protected:
 
 	private: DatabaseRepository* repo = new DatabaseRepository();
+
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -233,6 +243,38 @@ private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e
 	textBox1->ResetText();
 	textBox2->ResetText();
 	textBox3->ResetText();
+	comboBox1->ResetText();
+	gridView1->Rows->Clear();
+	std::list<Employee> data2 = repo->getAllEmployees(repo->getConn());
+	std::list<Employee>::iterator it2;
+	for (it2 = data2.begin(); it2 != data2.end(); ++it2) {
+		int s_id = it2->getId();
+		String^ s_first_name = msclr::interop::marshal_as<System::String^>(it2->getFirstName());
+		String^ s_last_name = msclr::interop::marshal_as<System::String^>(it2->getLastName());
+		String^ s_start_date = msclr::interop::marshal_as<System::String^>(it2->getStartDate());
+		int s_salary = it2->getSalary();
+
+		int roleID = it2->getRole();
+		String^ s_role = "";
+
+
+		std::list<Role> data = repo->getAllRoles(repo->getConn());
+
+		std::list<Role>::iterator it;
+		for (it = data.begin(); it != data.end(); ++it) {
+			int tempRoleId = it->getId();
+			if (tempRoleId == roleID) {
+				s_role = msclr::interop::marshal_as<System::String^>(it->getRoleName());
+			}
+		}
+		
+		gridView1->Rows->Add(s_id, s_first_name, s_last_name, s_salary, s_role, s_start_date);
+
+	}
+
+
+
+
 }	
 private: System::Void textBox3_TextChanged(System::Object^ sender, System::EventArgs^ e) {
 }

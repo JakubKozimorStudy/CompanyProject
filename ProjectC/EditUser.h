@@ -1,4 +1,14 @@
 #pragma once
+#include "Employee.h"
+#include "Role.h"
+#include "DatabaseRepository.h"
+#include <msclr\marshal_cppstd.h>
+#include "Role.h"
+#include <algorithm>
+#include <list>
+#include <mysql.h>
+#include <iostream>
+#include <string>
 
 namespace ProjectC {
 
@@ -14,7 +24,11 @@ namespace ProjectC {
 	/// </summary>
 	public ref class EditUser : public System::Windows::Forms::Form
 	{
+	private: DataGridView^ gridView1;
+		Employee* employee;
+		int id;
 	public:
+
 		EditUser(void)
 		{
 			InitializeComponent();
@@ -23,12 +37,31 @@ namespace ProjectC {
 			//
 		}
 
+		EditUser(Employee emp, DataGridView^ dataGridView1)
+		{
+			InitializeComponent();
+			//
+			//TODO: Add the constructor code here
+			//
+			std::cout << emp.getId() << std::endl;
+			this->employee = &emp;
+			id = emp.getId();
+			std::cout << this->employee->getId() << std::endl;
+			textBox1->Text = msclr::interop::marshal_as<System::String^>(emp.getFirstName());
+			textBox2->Text = msclr::interop::marshal_as<System::String^>(emp.getLastName());
+			int a = emp.getSalary();
+			std::string str = std::to_string(a);
+			textBox3->Text = msclr::interop::marshal_as<System::String^>(str);
+			this->gridView1 = dataGridView1;
+		}
+
 	protected:
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
 		~EditUser()
 		{
+			repo -> ~DatabaseRepository();
 			if (components)
 			{
 				delete components;
@@ -57,7 +90,8 @@ namespace ProjectC {
 
 
 
-	private:
+	private: DatabaseRepository* repo = new DatabaseRepository();
+
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -106,6 +140,7 @@ namespace ProjectC {
 			this->button1->TabIndex = 19;
 			this->button1->Text = L"Edytuj";
 			this->button1->UseVisualStyleBackColor = true;
+			this->button1->Click += gcnew System::EventHandler(this, &EditUser::button1_Click);
 			// 
 			// comboBox1
 			// 
@@ -187,7 +222,79 @@ namespace ProjectC {
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
+
+		std::list<Role> data = repo->getAllRoles(repo->getConn());
+
+		std::list<Role>::iterator it;
+		for (it = data.begin(); it != data.end(); ++it) {
+			String^ s_name = msclr::interop::marshal_as<System::String^>(it->getRoleName());
+			comboBox1->Items->Add(s_name);
 		}
+		
+
+		}
+
+
+
 #pragma endregion
-	};
+	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
+
+		String^ firstName = textBox1->Text;
+		String^ lastName = textBox2->Text;
+		String^ salary = textBox3->Text;
+		int intSalary = System::Convert::ToInt64(salary);
+		String^ role = comboBox1->Text;
+		int roleID = 1;
+		std::list<Role> data = repo->getAllRoles(repo->getConn());
+
+		std::list<Role>::iterator it;
+		for (it = data.begin(); it != data.end(); ++it) {
+			String^ s_name = msclr::interop::marshal_as<System::String^>(it->getRoleName());
+			if (s_name == role) {
+				roleID = it->getId();
+			}
+		}
+		std::cout << id;
+		const int uid = id;
+		Employee* emp = new Employee(msclr::interop::marshal_as<std::string>(firstName), msclr::interop::marshal_as<std::string>(lastName), roleID, intSalary);
+		repo->updateEmployee(uid, emp, repo->getConn());
+		textBox1->ResetText();
+		textBox2->ResetText();
+		textBox3->ResetText();
+		comboBox1->ResetText();
+		gridView1->Rows->Clear();
+		std::list<Employee> data2 = repo->getAllEmployees(repo->getConn());
+		std::list<Employee>::iterator it2;
+		for (it2 = data2.begin(); it2 != data2.end(); ++it2) {
+			int s_id = it2->getId();
+			String^ s_first_name = msclr::interop::marshal_as<System::String^>(it2->getFirstName());
+			String^ s_last_name = msclr::interop::marshal_as<System::String^>(it2->getLastName());
+			String^ s_start_date = msclr::interop::marshal_as<System::String^>(it2->getStartDate());
+			int s_salary = it2->getSalary();
+
+			int roleID = it2->getRole();
+			String^ s_role = "";
+
+
+			std::list<Role> data = repo->getAllRoles(repo->getConn());
+
+			std::list<Role>::iterator it;
+			for (it = data.begin(); it != data.end(); ++it) {
+				int tempRoleId = it->getId();
+				if (tempRoleId == roleID) {
+					s_role = msclr::interop::marshal_as<System::String^>(it->getRoleName());
+				}
+			}
+
+			gridView1->Rows->Add(s_id, s_first_name, s_last_name, s_salary, s_role, s_start_date);
+
+		}
+
+
+
+
+
+
+	}
+};
 }

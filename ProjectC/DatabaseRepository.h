@@ -27,6 +27,8 @@ public:
 	int DatabaseRepository::averageSaralry(MYSQL* conn);
 	int DatabaseRepository::countEmployee(MYSQL* conn, std::string sort);
 	void DatabaseRepository::removeUser(MYSQL* conn, int userId);
+	void DatabaseRepository::updateEmployee(const int &id, Employee* emp, MYSQL* conn);
+	time_t DatabaseRepository::String2time_t(const std::string& strDateTime);
 	MYSQL* getConn() {
 		return this->conn;
 	}

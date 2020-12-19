@@ -9,11 +9,16 @@ private:
 	std::string lastName;
 	int role;
 	int salary;
+	std::string start_date;
 
 public:
 	Employee(int newId, std::string newFirstName, std::string newLastName, int  newRole, int newSalary);
 
 	void setEmployee(int newId, std::string newFirstName, std::string newLastName, int newRole, int newSalary);
+
+	Employee(int newId, std::string newFirstName, std::string newLastName, int  newRole, int newSalary, std::string start_date);
+
+	void setEmployee(int newId, std::string newFirstName, std::string newLastName, int newRole, int newSalary, std::string start_Date);
 
 	Employee(std::string newFirstName, std::string newLastName, int  newRole, int newSalary);
 
@@ -39,6 +44,10 @@ public:
 		return this->role;
 	}
 
+	std::string getStartDate() {
+		return this->start_date;
+	}
+
 	void setId(int newId) {
 		this->id = newId;
 	}
@@ -46,6 +55,7 @@ public:
 	void setFirstName(std::string newFirstName) {
 		this->firstName = newFirstName;
 	}
+
 
 };
 

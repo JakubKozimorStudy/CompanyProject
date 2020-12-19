@@ -1,7 +1,9 @@
+#pragma once
 #include "Role.h"
 #include "DatabaseRepository.h"
 #include "string.h"
 #include <msclr\marshal_cppstd.h>
+
 
 namespace ProjectC {
 
@@ -115,7 +117,7 @@ namespace ProjectC {
 			this->PerformLayout();
 
 		}
-#pragma endregion
+	#pragma endregion
 	
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
 		String^ newRoleName = textBox1->Text;

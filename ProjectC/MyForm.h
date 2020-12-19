@@ -1,4 +1,4 @@
-﻿#pragma once
+﻿
 #include "AddUser.h"
 #include "EditUser.h"
 #include "AddRole.h"
@@ -10,8 +10,9 @@
 #include <algorithm>
 #include <list>
 #include "Role.h"
+#include "AddRole.h"
 
-
+#pragma once
 namespace ProjectC {
 
 	using namespace System;
@@ -233,6 +234,7 @@ namespace ProjectC {
 				int s_id = it->getId();
 				String^ s_first_name = msclr::interop::marshal_as<System::String^>(it->getFirstName());
 				String^ s_last_name = msclr::interop::marshal_as<System::String^>(it->getLastName());
+				String^ s_start_date = msclr::interop::marshal_as<System::String^>(it->getStartDate());
 				int s_salary = it->getSalary();
 
 				int roleID = it->getRole();
@@ -249,17 +251,17 @@ namespace ProjectC {
 					}
 				}
 
-				dataGridView1->Rows->Add(s_id, s_first_name, s_last_name, s_salary, s_role);
+				dataGridView1->Rows->Add(s_id, s_first_name, s_last_name, s_salary, s_role, s_start_date);
 
 			}
 
 		}
-		
+
+#pragma endregion
 
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
-		AddUser^ addUserForm = gcnew AddUser;
+		AddUser^ addUserForm = gcnew AddUser(this->dataGridView1);
 		addUserForm->Show();
-
 	}
 
 private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -276,8 +278,19 @@ private: System::Void button6_Click(System::Object^ sender, System::EventArgs^ e
 	statsForm->Show();
 }
 private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e) {
-	EditUser^ editUserForm = gcnew EditUser;
+	
+	int rowIndex = dataGridView1->CurrentCell->RowIndex;
+	int userId = Convert::ToInt64(dataGridView1->Rows[rowIndex]->Cells[0]->Value);
+	std::list<Employee> data = repo->getAllEmployees(repo->getConn());
+	std::list<Employee>::iterator it;
+	for (it = data.begin(); it != data.end(); ++it) {
+		if (it->getId() == userId) {
+
+	EditUser^ editUserForm = gcnew EditUser(Employee(userId, it->getFirstName(), it->getLastName(), it->getRole(), it->getSalary()), this->dataGridView1);
 	editUserForm->Show();
+		}
+	}
+
 }
 private: System::Void label3_Click(System::Object^ sender, System::EventArgs^ e) {
 	
@@ -288,7 +301,7 @@ private: System::Void button7_Click(System::Object^ sender, System::EventArgs^ e
 
 
 private: System::Void listBox1_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
-
+	
 }
 private: System::Void label2_Click(System::Object^ sender, System::EventArgs^ e) {
 }
@@ -297,8 +310,8 @@ private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e
 	int userId = Convert::ToInt32(dataGridView1->Rows[rowIndex]->Cells[0]->Value);
 
 	repo->removeUser(repo->getConn(), userId);
-
+		dataGridView1->Rows->RemoveAt(rowIndex);
+	
 }
 };
 }
-#pragma endregion
