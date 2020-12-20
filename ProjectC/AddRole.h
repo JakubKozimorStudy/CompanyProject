@@ -47,7 +47,8 @@ namespace ProjectC {
 	private: System::Windows::Forms::Button^ button1;
 
 	private: DatabaseRepository* repo = new DatabaseRepository();
-		/// <summary>
+	private: System::Windows::Forms::Label^ label3;
+		   /// <summary>
 		/// Required designer variable.
 		/// </summary>
 		System::ComponentModel::Container ^components;
@@ -63,6 +64,7 @@ namespace ProjectC {
 			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->button1 = (gcnew System::Windows::Forms::Button());
+			this->label3 = (gcnew System::Windows::Forms::Label());
 			this->SuspendLayout();
 			// 
 			// label1
@@ -102,11 +104,21 @@ namespace ProjectC {
 			this->button1->UseVisualStyleBackColor = true;
 			this->button1->Click += gcnew System::EventHandler(this, &AddRole::button1_Click);
 			// 
+			// label3
+			// 
+			this->label3->AutoSize = true;
+			this->label3->ForeColor = System::Drawing::Color::Red;
+			this->label3->Location = System::Drawing::Point(90, 86);
+			this->label3->Name = L"label3";
+			this->label3->Size = System::Drawing::Size(0, 13);
+			this->label3->TabIndex = 4;
+			// 
 			// AddRole
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(302, 144);
+			this->Controls->Add(this->label3);
 			this->Controls->Add(this->button1);
 			this->Controls->Add(this->label2);
 			this->Controls->Add(this->textBox1);
@@ -121,10 +133,16 @@ namespace ProjectC {
 	
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
 		String^ newRoleName = textBox1->Text;
-		std::string s_roleName = msclr::interop::marshal_as<std::string>(newRoleName);
-		Role newRole = Role(s_roleName);
-		repo->saveRole(newRole, repo->getConn());
-		textBox1->ResetText();
+		if (String::IsNullOrEmpty(newRoleName)) {
+			label3->Text = "Pole nie mo¿e byæ puste";
+		}
+		else {
+			std::string s_roleName = msclr::interop::marshal_as<std::string>(newRoleName);
+			Role newRole = Role(s_roleName);
+			repo->saveRole(newRole, repo->getConn());
+			textBox1->ResetText();
+			label3->Text = "";
+		}
 	}
 };
 }

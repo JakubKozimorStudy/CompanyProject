@@ -26,7 +26,11 @@ namespace ProjectC {
 	{
 	private: DataGridView^ gridView1;
 		Employee* employee;
-		int id;
+	private: System::Windows::Forms::Label^ label5;
+	private: System::Windows::Forms::Label^ label6;
+	private: System::Windows::Forms::Label^ label7;
+	private: System::Windows::Forms::Label^ label8;
+		   int id;
 	public:
 
 		EditUser(void)
@@ -114,11 +118,15 @@ namespace ProjectC {
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
 			this->labal1 = (gcnew System::Windows::Forms::Label());
+			this->label5 = (gcnew System::Windows::Forms::Label());
+			this->label6 = (gcnew System::Windows::Forms::Label());
+			this->label7 = (gcnew System::Windows::Forms::Label());
+			this->label8 = (gcnew System::Windows::Forms::Label());
 			this->SuspendLayout();
 			// 
 			// textBox3
 			// 
-			this->textBox3->Location = System::Drawing::Point(78, 212);
+			this->textBox3->Location = System::Drawing::Point(80, 256);
 			this->textBox3->Name = L"textBox3";
 			this->textBox3->Size = System::Drawing::Size(100, 20);
 			this->textBox3->TabIndex = 21;
@@ -126,7 +134,7 @@ namespace ProjectC {
 			// label4
 			// 
 			this->label4->AutoSize = true;
-			this->label4->Location = System::Drawing::Point(101, 196);
+			this->label4->Location = System::Drawing::Point(103, 240);
 			this->label4->Name = L"label4";
 			this->label4->Size = System::Drawing::Size(61, 13);
 			this->label4->TabIndex = 20;
@@ -134,7 +142,7 @@ namespace ProjectC {
 			// 
 			// button1
 			// 
-			this->button1->Location = System::Drawing::Point(78, 259);
+			this->button1->Location = System::Drawing::Point(80, 317);
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(100, 23);
 			this->button1->TabIndex = 19;
@@ -145,14 +153,14 @@ namespace ProjectC {
 			// comboBox1
 			// 
 			this->comboBox1->FormattingEnabled = true;
-			this->comboBox1->Location = System::Drawing::Point(78, 163);
+			this->comboBox1->Location = System::Drawing::Point(80, 191);
 			this->comboBox1->Name = L"comboBox1";
 			this->comboBox1->Size = System::Drawing::Size(100, 21);
 			this->comboBox1->TabIndex = 18;
 			// 
 			// textBox2
 			// 
-			this->textBox2->Location = System::Drawing::Point(78, 114);
+			this->textBox2->Location = System::Drawing::Point(78, 125);
 			this->textBox2->Name = L"textBox2";
 			this->textBox2->Size = System::Drawing::Size(100, 20);
 			this->textBox2->TabIndex = 17;
@@ -160,7 +168,7 @@ namespace ProjectC {
 			// label3
 			// 
 			this->label3->AutoSize = true;
-			this->label3->Location = System::Drawing::Point(98, 147);
+			this->label3->Location = System::Drawing::Point(100, 175);
 			this->label3->Name = L"label3";
 			this->label3->Size = System::Drawing::Size(62, 13);
 			this->label3->TabIndex = 16;
@@ -169,7 +177,7 @@ namespace ProjectC {
 			// label2
 			// 
 			this->label2->AutoSize = true;
-			this->label2->Location = System::Drawing::Point(103, 98);
+			this->label2->Location = System::Drawing::Point(103, 109);
 			this->label2->Name = L"label2";
 			this->label2->Size = System::Drawing::Size(53, 13);
 			this->label2->TabIndex = 15;
@@ -202,11 +210,51 @@ namespace ProjectC {
 			this->labal1->TabIndex = 12;
 			this->labal1->Text = L"Edytuj pracownika";
 			// 
+			// label5
+			// 
+			this->label5->AutoSize = true;
+			this->label5->ForeColor = System::Drawing::Color::Red;
+			this->label5->Location = System::Drawing::Point(65, 90);
+			this->label5->Name = L"label5";
+			this->label5->Size = System::Drawing::Size(0, 13);
+			this->label5->TabIndex = 22;
+			// 
+			// label6
+			// 
+			this->label6->AutoSize = true;
+			this->label6->ForeColor = System::Drawing::Color::Red;
+			this->label6->Location = System::Drawing::Point(65, 148);
+			this->label6->Name = L"label6";
+			this->label6->Size = System::Drawing::Size(0, 13);
+			this->label6->TabIndex = 23;
+			// 
+			// label7
+			// 
+			this->label7->AutoSize = true;
+			this->label7->ForeColor = System::Drawing::Color::Red;
+			this->label7->Location = System::Drawing::Point(65, 215);
+			this->label7->Name = L"label7";
+			this->label7->Size = System::Drawing::Size(0, 13);
+			this->label7->TabIndex = 24;
+			// 
+			// label8
+			// 
+			this->label8->AutoSize = true;
+			this->label8->ForeColor = System::Drawing::Color::Red;
+			this->label8->Location = System::Drawing::Point(65, 279);
+			this->label8->Name = L"label8";
+			this->label8->Size = System::Drawing::Size(0, 13);
+			this->label8->TabIndex = 25;
+			// 
 			// EditUser
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(265, 314);
+			this->ClientSize = System::Drawing::Size(265, 360);
+			this->Controls->Add(this->label8);
+			this->Controls->Add(this->label7);
+			this->Controls->Add(this->label6);
+			this->Controls->Add(this->label5);
 			this->Controls->Add(this->textBox3);
 			this->Controls->Add(this->label4);
 			this->Controls->Add(this->button1);
@@ -222,14 +270,15 @@ namespace ProjectC {
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
+			std::list<Role> data = repo->getAllRoles(repo->getConn());
 
-		std::list<Role> data = repo->getAllRoles(repo->getConn());
+			std::list<Role>::iterator it;
+			for (it = data.begin(); it != data.end(); ++it) {
+				String^ s_name = msclr::interop::marshal_as<System::String^>(it->getRoleName());
+				comboBox1->Items->Add(s_name);
+			}
 
-		std::list<Role>::iterator it;
-		for (it = data.begin(); it != data.end(); ++it) {
-			String^ s_name = msclr::interop::marshal_as<System::String^>(it->getRoleName());
-			comboBox1->Items->Add(s_name);
-		}
+
 		
 
 		}
@@ -242,53 +291,96 @@ namespace ProjectC {
 		String^ firstName = textBox1->Text;
 		String^ lastName = textBox2->Text;
 		String^ salary = textBox3->Text;
-		int intSalary = System::Convert::ToInt64(salary);
 		String^ role = comboBox1->Text;
-		int roleID = 1;
-		std::list<Role> data = repo->getAllRoles(repo->getConn());
 
-		std::list<Role>::iterator it;
-		for (it = data.begin(); it != data.end(); ++it) {
-			String^ s_name = msclr::interop::marshal_as<System::String^>(it->getRoleName());
-			if (s_name == role) {
-				roleID = it->getId();
+
+
+
+		if (String::IsNullOrEmpty(firstName) || String::IsNullOrEmpty(lastName) || String::IsNullOrEmpty(salary) || String::IsNullOrEmpty(role)) {
+
+			if (String::IsNullOrEmpty(firstName)) {
+				label5->Text = "Pole nie mo¿e byæ puste";
 			}
+			else {
+				label5->Text = "";
+			}
+
+			if (String::IsNullOrEmpty(lastName)) {
+				label6->Text = "Pole nie mo¿e byæ puste";
+			}
+			else {
+				label6->Text = "";
+			}
+
+			if (String::IsNullOrEmpty(role)) {
+				label7->Text = "Pole nie mo¿e byæ puste";
+			}
+			else {
+				label7->Text = "";
+			}
+
+			if (String::IsNullOrEmpty(salary)) {
+				label8->Text = "Pole nie mo¿e byæ puste";
+			}
+			else {
+				label8->Text = "";
+			}
+
 		}
-		std::cout << id;
-		const int uid = id;
-		Employee* emp = new Employee(msclr::interop::marshal_as<std::string>(firstName), msclr::interop::marshal_as<std::string>(lastName), roleID, intSalary);
-		repo->updateEmployee(uid, emp, repo->getConn());
-		textBox1->ResetText();
-		textBox2->ResetText();
-		textBox3->ResetText();
-		comboBox1->ResetText();
-		gridView1->Rows->Clear();
-		std::list<Employee> data2 = repo->getAllEmployees(repo->getConn());
-		std::list<Employee>::iterator it2;
-		for (it2 = data2.begin(); it2 != data2.end(); ++it2) {
-			int s_id = it2->getId();
-			String^ s_first_name = msclr::interop::marshal_as<System::String^>(it2->getFirstName());
-			String^ s_last_name = msclr::interop::marshal_as<System::String^>(it2->getLastName());
-			String^ s_start_date = msclr::interop::marshal_as<System::String^>(it2->getStartDate());
-			int s_salary = it2->getSalary();
-
-			int roleID = it2->getRole();
-			String^ s_role = "";
-
-
+		else {
+			int intSalary = System::Convert::ToInt64(salary);
+			int roleID = 1;
 			std::list<Role> data = repo->getAllRoles(repo->getConn());
 
 			std::list<Role>::iterator it;
 			for (it = data.begin(); it != data.end(); ++it) {
-				int tempRoleId = it->getId();
-				if (tempRoleId == roleID) {
-					s_role = msclr::interop::marshal_as<System::String^>(it->getRoleName());
+				String^ s_name = msclr::interop::marshal_as<System::String^>(it->getRoleName());
+				if (s_name == role) {
+					roleID = it->getId();
 				}
 			}
+			std::cout << id;
+			const int uid = id;
+			Employee* emp = new Employee(msclr::interop::marshal_as<std::string>(firstName), msclr::interop::marshal_as<std::string>(lastName), roleID, intSalary);
+			repo->updateEmployee(uid, emp, repo->getConn());
+			textBox1->ResetText();
+			textBox2->ResetText();
+			textBox3->ResetText();
+			comboBox1->ResetText();
+			gridView1->Rows->Clear();
+			std::list<Employee> data2 = repo->getAllEmployees(repo->getConn());
+			std::list<Employee>::iterator it2;
+			for (it2 = data2.begin(); it2 != data2.end(); ++it2) {
+				int s_id = it2->getId();
+				String^ s_first_name = msclr::interop::marshal_as<System::String^>(it2->getFirstName());
+				String^ s_last_name = msclr::interop::marshal_as<System::String^>(it2->getLastName());
+				String^ s_start_date = msclr::interop::marshal_as<System::String^>(it2->getStartDate());
+				int s_salary = it2->getSalary();
 
-			gridView1->Rows->Add(s_id, s_first_name, s_last_name, s_salary, s_role, s_start_date);
+				int roleID = it2->getRole();
+				String^ s_role = "";
 
+
+				std::list<Role> data = repo->getAllRoles(repo->getConn());
+
+				std::list<Role>::iterator it;
+				for (it = data.begin(); it != data.end(); ++it) {
+					int tempRoleId = it->getId();
+					if (tempRoleId == roleID) {
+						s_role = msclr::interop::marshal_as<System::String^>(it->getRoleName());
+					}
+				}
+
+				gridView1->Rows->Add(s_id, s_first_name, s_last_name, s_salary, s_role, s_start_date);
+
+				label5->Text = "";
+				label6->Text = "";
+				label7->Text = "";
+				label8->Text = "";
+			}
 		}
+
+		
 
 
 

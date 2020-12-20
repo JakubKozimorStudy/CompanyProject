@@ -13,7 +13,7 @@ DatabaseRepository::DatabaseRepository()
 {
 	conn = mysql_init(0);
 
-	conn = mysql_real_connect(conn, "localhost", "root", "root", "employeedb", 3306, NULL, 0);
+	conn = mysql_real_connect(conn, "localhost", "root", "admin", "employeedb", 3306, NULL, 0);
 }
 
 
